@@ -1,12 +1,10 @@
 const express = require('express');
 const userController = require('../Controllers/authController');
+const checkUser = require('../Utils/checkUser');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    const user = req.session.user || null;
-    res.render('head', { user });
-});
+router.get('*', checkUser);
 
 router.route('/').get(userController.home);
 router.route('/signup').get(userController.signupPage);

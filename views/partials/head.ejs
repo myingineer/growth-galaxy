@@ -10,8 +10,13 @@
     <nav>
         <a href="/">myingineer</a>
         <ul>
+            <% if (user) {%>
+            <li>Welcome, <%= user.username.toUpperCase() %></li>
+            <li><a href="/logout">Log Out</a></li>
+            <%} else {%>
             <li><a href="/login">Log In</a></li>
             <li><a href="/signup">Sign Up</a></li>
+            <%} %>
         </ul>
     </nav>
 </body>

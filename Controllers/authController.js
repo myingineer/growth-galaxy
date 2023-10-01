@@ -91,8 +91,6 @@ exports.protect = async (req, res, next) => {
         if (!user) {
             return res.status(404).redirect("/login");
         };
-    
-        req.session.user = user;
     } catch (error) {
         res.clearCookie('jwt');
         return res.status(401).redirect('/login');
@@ -102,6 +100,5 @@ exports.protect = async (req, res, next) => {
 
 
 exports.dashboardPage = (req, res) => {
-    let user = req.session.user[0];
     res.status(200).render('dashboard');
 };
