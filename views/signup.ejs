@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="shortcut icon" href="./favicon.png" type="image/x-icon">
+    <title>Sign Up</title>
+</head>
+<body>
+    <%- include('partials/head.ejs'); -%>
+    <form>
+        <h2>SIGNUP</h2>
+        <div class="success-signup"></div>
+        <label for="username">Username</label>
+        <input type="text" name="username" placeholder="username" id="username" autocomplete="username" required>
+        <div class="username error"></div>
+        <label for="email">Email</label>
+        <input type="email" name="email" placeholder="someone@example.com" id="email" autocomplete="email" required>
+        <div class="email error"></div>
+        <label for="password">Password</label>
+        <input type="password" name="password" placeholder="Password" id="password" required>
+        <div class="password error"></div>
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" id="confirmPassword" required>
+        <div class="confirmPassword error"></div>
+        <button>Sign Up</button>
+    </form>
+
+    <script src="./signup.js"></script>
+</body>
+</html>
