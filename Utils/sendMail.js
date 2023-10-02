@@ -10,7 +10,7 @@ const sendPasswordResetEmail = async (options) => {
     });
 
     const emailOptions = {
-        from: 'Growth Galaxy Support <support@growthgalaxy.com>',
+        from: 'Growth Galaxy Support',
         to: options.email,
         subject: options.subject,
         text: options.message

@@ -166,3 +166,7 @@ exports.forgotPassword = async (req, res) => {
 exports.dashboardPage = (req, res) => {
     res.status(200).render('dashboard');
 };
+
+exports.resetPasswordPage = (req, res) => {
+    res.status(200).render('resetpassword');
+};
