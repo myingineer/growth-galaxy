@@ -2,6 +2,7 @@ const User = require('../Models/userModel');
 const handleSignUpError = require('../Utils/signUpErrorHandler');
 const jwt = require('jsonwebtoken');
 const util = require('util');
+const sendPasswordResetEmail = require('../Utils/sendMail');
 
 const createToken = (id, email) => {
     return jwt.sign({id, email}, process.env.SECRET_KEY, {
@@ -96,6 +97,69 @@ exports.protect = async (req, res, next) => {
         return res.status(401).redirect('/login');
     };
     next();
+};
+
+exports.logout = (req, res) => {
+    res.clearCookie('jwt');
+    res.locals.user = null;
+    return res.status(200).redirect('/login');
+};
+
+exports.forgotPasswordPage = (req, res) => {
+    res.status(200).render('forgotpassword');
+};
+
+exports.forgotPassword = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const user = await User.findOne({email});
+
+        if (!user) {
+            return res.status(404).json({
+                status: 'Failed',
+                message: 'User not found. Please Sign Up'
+            });
+        };
+
+        const passwordResetToken = await user.createResetPasswordToken();
+        await user.save({validateBeforeSave: false});
+
+        const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${passwordResetToken}`;
+        const message = `
+            We received a request to reset your password.\n\n
+            Please use the link to reset your password: \n\n
+            ${resetUrl}\n\n
+            This link would be valid for 10 minutes.\n\n
+            If you did not request to reset you password, kindly ignore this Mail and Contact Support\n\n
+        `
+        
+        try {
+            await sendPasswordResetEmail({
+                email: user.email,
+                subject: 'Password Reset Link',
+                message
+            });
+    
+            res.status(200).json({
+                status: 'Success',
+                message: `Password Reset Link Sent To ${user.email}. Please check your mail. If you didn't see the mail, check your SPAM folder`
+            });
+        } catch (error) {
+            user.passwordResetToken = undefined;
+            user.passwordResetTokenExpire = undefined;
+            user.save({validateBeforeSave: false});
+            res.status(500).json({
+                status: 'Failed',
+                message: 'An Error Occured'
+            });
+        };
+
+    } catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            message: 'An Error Occured'
+        });
+    };
 };
 
 

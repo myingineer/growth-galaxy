@@ -35,7 +35,7 @@ form.addEventListener('submit', async (e) => {
             successMessage.textContent = 'Sign Up Successful';
             setTimeout(() => {
                 window.location.href = "/login";  
-            }, 1500);
+            }, 1250);
         };
 
     } catch (error) {

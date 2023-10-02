@@ -29,10 +29,10 @@ form.addEventListener('submit', async (e) => {
             successMessage.style.color = 'green';
             setTimeout(() => {
                 window.location.href = "/dashboard";
-            }, 1500);
+            }, 1250);
         };
 
     } catch (error) {
-        successMessage.textContent = 'ERROR 504: Please Reload The Page'
+        successMessage.textContent = 'ERROR 504: Please Reload The Page';
     };
 });

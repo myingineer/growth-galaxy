@@ -12,6 +12,10 @@ router.route('/login').get(userController.loginPage);
 router.route('/dashboard').get(userController.protect, userController.dashboardPage);
 router.route('/signUpUser').post(userController.signup);
 router.route('/loginUser').post(userController.login);
+router.route('/logout').get(userController.logout);
+router.route('/forgotPassword').get(userController.forgotPasswordPage);
+router.route('/passwordchange').post(userController.forgotPassword);
+
 
 
 module.exports = router;

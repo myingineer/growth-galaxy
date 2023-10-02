@@ -7,6 +7,7 @@ const userRoutes = require('./Routes/authRoutes');
 app.use(express.static('public'));
 app.use(cookieParser());
 app.use(express.json());
+app.enable('trust proxy');
 app.use(cors());
 app.set('view engine', 'ejs');
 app.use('/', userRoutes);
