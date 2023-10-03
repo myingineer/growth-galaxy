@@ -29,6 +29,9 @@ form.addEventListener('submit', async (e) => {
         else if (data.status === 'Failed') {
             signalMessage.style.color = 'red';
             signalMessage.textContent = data.message;
+            setTimeout(() => {
+                window.location.href = "/forgotPassword";
+            }, 2000);
         } else if (data.status === 'Failed' && data.error.name === 'ValidationError') {
             signalMessage.textContent = 'Password Mis-Match',
             signalMessage.style.color = 'red';
