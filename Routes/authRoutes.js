@@ -16,7 +16,7 @@ router.route('/logout').get(userController.logout);
 router.route('/forgotPassword').get(userController.forgotPasswordPage);
 router.route('/passwordchange').post(userController.forgotPassword);
 router.route('/resetPassword/:token').get(userController.resetPasswordPage);
-// router.route('/resetPassword/:token').patch(userController.resetPassword);
+router.route('/resetPassword/:token').patch(userController.resetPassword);
 
 
 

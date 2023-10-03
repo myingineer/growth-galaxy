@@ -3,6 +3,7 @@ const handleSignUpError = require('../Utils/signUpErrorHandler');
 const jwt = require('jsonwebtoken');
 const util = require('util');
 const sendPasswordResetEmail = require('../Utils/sendMail');
+const crypto = require('crypto');
 
 const createToken = (id, email) => {
     return jwt.sign({id, email}, process.env.SECRET_KEY, {
@@ -124,7 +125,7 @@ exports.forgotPassword = async (req, res) => {
         const passwordResetToken = await user.createResetPasswordToken();
         await user.save({validateBeforeSave: false});
 
-        const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${passwordResetToken}`;
+        const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${passwordResetToken}`;
         const message = `
             We received a request to reset your password.\n\n
             Please use the link to reset your password: \n\n
@@ -169,4 +170,37 @@ exports.dashboardPage = (req, res) => {
 
 exports.resetPasswordPage = (req, res) => {
     res.status(200).render('resetpassword');
+};
+
+exports.resetPassword = async (req, res) => {
+    try {
+        const token = crypto.createHash('sha256').update(req.params.token).digest('hex');
+        const user = await User.findOne({passwordResetToken: token, passwordResetTokenExpire: {$gt: Date.now()}});
+
+        if (!user) {
+            return res.status(404).json({
+                status: 'Failed',
+                message: 'Reset Token is Invalid/Expired. Please Request to Reset Password Again'
+            });
+        };
+
+        user.password = req.body.password;
+        user.confirmPassword = req.body.confirmPassword;
+        user.passwordResetToken = undefined;
+        user.passwordResetTokenExpire = undefined;
+        user.passwordChangedAt = Date.now();
+
+        await user.save({validateBeforeSave: true});
+
+        res.status(200).json({
+            status: 'Success',
+            message: 'Password Changed Successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'Failed',
+            message: 'An Error Occured',
+            error
+        });
+    };
 };
