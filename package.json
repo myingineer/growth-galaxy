@@ -4,7 +4,8 @@
   "description": "A basic login and signup page to view protected routes  using JWT",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js"
+    "test": "nodemon index.js",
+    "build": "npm i"
   },
   "author": "myingineer",
   "license": "ISC",
